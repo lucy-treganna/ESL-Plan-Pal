@@ -25,8 +25,10 @@ export default {
         "neutral-medium-gray": "#6B7280",
       },
       fontFamily: {
-        // inter: ["Inter", "sans-serif"],
-        merriweather: ["Merriweather", "sans-serif"],
+        inter: "var(--font-inter), sans-serif",
+        merriweather: "var(--font-merriweather), sans-serif",
+        quicksand: "var(--font-quicksand), sans-serif",
+        poppins: "var(--font-poppins), sans-serif",
       },
     },
   },
