@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${merriweather.variable} ${inter.variable} ${quicksand.variable} ${poppins.variable} text-neutral-dark-gray antialiased bg-neutral-light-gray`}
+        className={`${merriweather.variable} ${inter.variable} ${quicksand.variable} ${poppins.variable} bg-cool-white h-full`}
       >
         <NavBar />
         {children}
