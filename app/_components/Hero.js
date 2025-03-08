@@ -1,9 +1,11 @@
+// KEEPING FOR ORIGINAL HERO CODE - MAY DELETE LATER
+
 import { SparklesIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default function Hero() {
   return (
-    <div className="relative w-full min-h-screen flex flex-col items-center justify-center px-4 text-center bg-pale-blue overflow-hidden">
+    <div className="w-full min-h-screen flex flex-col items-center justify-center px-4 text-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-64 h-64 bg-sky-blue rounded-full blur-3xl opacity-60 transform -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-medium-blue rounded-full blur-3xl opacity-40 transform translate-x-1/2 translate-y-1/2"></div>
