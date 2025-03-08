@@ -1,4 +1,4 @@
-import { Inter, Merriweather_Sans, Quicksand, Poppins } from "next/font/google";
+import { Inter, Merriweather_Sans, Poppins } from "next/font/google";
 import "./globals.css";
 
 import NavBar from "@/app/_components/NavBar";
@@ -15,11 +15,6 @@ const merriweather = Merriweather_Sans({
   display: "swap",
 });
 
-const quicksand = Quicksand({
-  subsets: ["latin"],
-  variable: "--font-quicksand",
-  display: "swap",
-});
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -38,7 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${merriweather.variable} ${inter.variable} ${quicksand.variable} ${poppins.variable} antialiased bg-pale-blue min-h-screen relative overflow-hidden`}
+        className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal min-h-screen relative overflow-hidden`}
       >
         <NavBar />
         <div className="flex-1 px-8 py-12 grid">
