@@ -12,12 +12,16 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
 
-        // Vibrant Colors
-        "vibrant-navy": "#0A1045",
-        "vibrant-cyan": "#00C2D1",
-        "vibrant-yellow": "#F9E900",
-        "vibrant-orange": "#F6AF65",
-        "vibrant-magenta": "#ED33B9",
+        // Blue/purple theme Colors
+        "pale-blue": "#D9F0FF",
+        "sky-blue": "#A3D5FF",
+        "medium-blue": "#83C9F4",
+        "medium-purple": "#6F73D2",
+        "grey-purple": "#7681B3",
+
+        // Neutrals
+        "cool-white": "#F8FAFC",
+        "charcoal": "#2A2E37",
 
         // Neutral Colors
         "neutral-dark-gray": "#1F2937",
@@ -25,10 +29,13 @@ export default {
         "neutral-medium-gray": "#6B7280",
       },
       fontFamily: {
-        // inter: ["Inter", "sans-serif"],
-        merriweather: ["Merriweather", "sans-serif"],
+        inter: "var(--font-inter), sans-serif",
+        merriweather: "var(--font-merriweather), sans-serif",
+        quicksand: "var(--font-quicksand), sans-serif",
+        poppins: "var(--font-poppins), sans-serif",
       },
     },
   },
+
   plugins: [],
 };
