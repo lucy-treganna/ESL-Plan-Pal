@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal min-h-screen relative overflow-hidden`}
+        className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal relative`}
       >
         <NavBar />
         <div className="flex-1 px-8 py-12 grid">
