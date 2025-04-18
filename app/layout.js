@@ -15,7 +15,6 @@ const merriweather = Merriweather_Sans({
   display: "swap",
 });
 
-
 const poppins = Poppins({
   subsets: ["latin"],
   weight: "300",

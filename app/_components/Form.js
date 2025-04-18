@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import FormButton from "@/app/_components/FormButton";
+import { extractJsonFromGeminiResponse } from "@/app/_lib/utils";
 
 export default function Form() {
   const [formData, setFormData] = useState({
@@ -12,7 +13,39 @@ export default function Form() {
     topic: "",
   });
   const [responseData, setResponseData] = useState(null);
+  const [youtubeData, setYoutubeData] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (responseData) {
+      const processSongs = async (songData) => {
+        try {
+          const rawData = songData.candidates[0].content.parts[0].text;
+          const cleaned = extractJsonFromGeminiResponse(rawData);
+          const parsedSongs = JSON.parse(cleaned);
+          console.log("songs:", parsedSongs);
+          const firstSong = parsedSongs[0];
+
+          const res = await fetch("/api/youtube", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: firstSong.title,
+              channel: firstSong.channel,
+            }),
+          });
+
+          const data = await res.json();
+          console.log("YouTube API response:", data);
+          const videoId = data.items[0].id.videoId;
+          setYoutubeData(videoId);
+        } catch (err) {
+          console.error("error fetching song:", err);
+        }
+      };
+      processSongs(responseData);
+    }
+  }, [responseData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +70,7 @@ export default function Form() {
       const data = await res.json();
 
       if (res.ok) {
-        setResponseData(data); // Set response data to state
+        setResponseData(data);
         setError(null);
       } else {
         setError(data.error || "An error occurred");
@@ -138,12 +171,17 @@ export default function Form() {
         </div>
       </div>
 
-      {responseData && (
-        <div className="mt-4">
-          <h3 className="font-bold">Generated Resources:</h3>
-          <pre>{JSON.stringify(responseData, null, 2)}</pre>
+      {/* {youtubeData && (
+        <div className="aspect-w-16 aspect-h-9">
+          <iframe
+            src={`https://www.youtube.com/embed/${youtubeData}`}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          ></iframe>
         </div>
-      )}
+      )} */}
     </form>
   );
 }
