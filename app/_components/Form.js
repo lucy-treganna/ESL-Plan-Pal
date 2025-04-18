@@ -144,13 +144,14 @@ export default function Form() {
                   id="topic"
                   name="topic"
                   type="text"
+                  placeholder="e.g. Space"
                   onChange={handleChange}
                   className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
                 />
               </div>
             </div>
 
-            <div className="sm:col-span-3">
+            {/* <div className="sm:col-span-3">
               <label htmlFor="numSongs" className="block text-sm/6 font-medium">
                 How many songs would you like to include?
               </label>
@@ -158,20 +159,27 @@ export default function Form() {
                 <input
                   id="numSongs"
                   name="numSongs"
+                  max="5"
+                  placeholder="Choose a max. of 5"
                   type="number"
                   onChange={handleChange}
                   className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="pt-6">
             <FormButton text="Generate resources" onClick={handleSubmit} />
           </div>
         </div>
       </div>
+    </form>
+  );
+}
 
-      {/* {youtubeData && (
+// sample snippet - how youtube data can be embedded as iframe:
+{
+  /* {youtubeData && (
         <div className="aspect-w-16 aspect-h-9">
           <iframe
             src={`https://www.youtube.com/embed/${youtubeData}`}
@@ -181,7 +189,5 @@ export default function Form() {
             className="w-full h-full"
           ></iframe>
         </div>
-      )} */}
-    </form>
-  );
+      )} */
 }
