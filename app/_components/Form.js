@@ -18,32 +18,33 @@ export default function Form() {
 
   useEffect(() => {
     if (responseData) {
-      const processSongs = async (songData) => {
-        try {
-          const rawData = songData.candidates[0].content.parts[0].text;
-          const cleaned = extractJsonFromGeminiResponse(rawData);
-          const parsedSongs = JSON.parse(cleaned);
-          console.log("songs:", parsedSongs);
-          const firstSong = parsedSongs[0];
+      console.log(responseData)
+      // const processSongs = async (songData) => {
+      //   try {
+      //     const rawData = songData.candidates[0].content.parts[0].text;
+      //     const cleaned = extractJsonFromGeminiResponse(rawData);
+      //     const parsedSongs = JSON.parse(cleaned);
+      //     console.log("songs:", parsedSongs);
+      //     const firstSong = parsedSongs[0];
 
-          const res = await fetch("/api/youtube", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              title: firstSong.title,
-              channel: firstSong.channel,
-            }),
-          });
+      //     const res = await fetch("/api/youtube", {
+      //       method: "POST",
+      //       headers: { "Content-Type": "application/json" },
+      //       body: JSON.stringify({
+      //         title: firstSong.title,
+      //         channel: firstSong.channel,
+      //       }),
+      //     });
 
-          const data = await res.json();
-          console.log("YouTube API response:", data);
-          const videoId = data.items[0].id.videoId;
-          setYoutubeData(videoId);
-        } catch (err) {
-          console.error("error fetching song:", err);
-        }
-      };
-      processSongs(responseData);
+      //     const data = await res.json();
+      //     console.log("YouTube API response:", data);
+      //     const videoId = data.items[0].id.videoId;
+      //     setYoutubeData(videoId);
+      //   } catch (err) {
+      //     console.error("error fetching song:", err);
+      //   }
+      // };
+      // processSongs(responseData);
     }
   }, [responseData]);
 
