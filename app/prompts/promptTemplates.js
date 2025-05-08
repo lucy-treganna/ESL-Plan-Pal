@@ -1,7 +1,7 @@
 export const BASE_PROMPT = `
 ##Role
 - You are a resource generator for an ESL lesson planning tool. Act as an experienced ESL teacher and early childhood education specialist.
-- You are designing a short, engaging English as a foreign language lesson for a small-medium sized class of ${age}-year-old ${level}-level learners on the topic of "${topic}".
+- You are designing a short, engaging English as a foreign language lesson for a small-medium sized class of ${age} year-old ${level}-level learners on the topic of "${topic}".
 - You will respond in raw JSON only. Do not include markdown, headers, commentary, or any extra text.
 `
 export const prompt0_3Yrs = `
@@ -44,6 +44,7 @@ Use this structure:
 
 ##Guidelines
 - Ensure vocabulary is reinforced across all sections
+- Tailor everything to be developmentally and English-level appropriate
 - Use only well-known ESL YouTube channels for songs
 - Use repetition, playful context, and clear visual/sensory support
 `
@@ -51,7 +52,7 @@ Use this structure:
 export const prompt4_5Yrs = `
 ##Goal
 - Return a single JSON array with 4 sections: songs, vocabulary, games, speaking prompts.
-- Choose 3 songs, 5 words, 2 games and 2 speaking prompts.
+- Choose ${numSongs} songs, ${numWords} words, ${numGames} games and ${numPrompts} speaking prompts.
 
 Use this structure:
 [
@@ -98,7 +99,7 @@ Use this structure:
 
 ##Guidelines
 - Ensure vocabulary is reinforced across all sections
-- Tailor everything to be developmentally appropriate
+- Tailor everything to be developmentally and English-level appropriate
 - Use only well-known ESL YouTube channels for songs
 - Use repetition, playful context, and clear visual/sensory support
 `
@@ -106,7 +107,7 @@ Use this structure:
 export const prompt5_6Yrs = `
 ##Goal
 - Return a single JSON array with 4 sections: songs, vocabulary, games, speaking prompts.
-- Choose 3 songs, 7 words, 3 games and 3 speaking prompts.
+- Choose ${numSongs} songs, ${numWords} words, ${numGames} games and ${numPrompts} speaking prompts.
 
 Use this structure:
 [
@@ -153,7 +154,7 @@ Use this structure:
 
 ##Guidelines
 - Ensure vocabulary is reinforced across all sections
-- Tailor everything to be developmentally appropriate
+- Tailor everything to be developmentally and English-level appropriate
 - Use only well-known ESL YouTube channels for songs
 - Use repetition, playful context, and clear visual/sensory support
 `
