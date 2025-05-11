@@ -7,8 +7,8 @@ import {
 
 // 1. Decide how many of each resource type
 export function getResourceCount(age, level) {
-  if (age === "Under 3 Years") {
-    return { songs: 2, vocabulary: level === advanced ? 3 : 2, games: 2, speakingPrompts: 0 };
+  if (age === "Under 3 years") {
+    return { songs: 2, vocabulary: level === "Advanced" ? 3 : 2, games: 2, speakingPrompts: 0 };
   }
 
   if (age === "4-5 years") {

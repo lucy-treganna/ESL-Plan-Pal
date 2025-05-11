@@ -9,7 +9,11 @@ export async function POST(req) {
   try {
     const { age, level, topic } = await req.json();
 
+    console.log("age:", age, "level:", level, "topic:", topic)
+
     const resourceCounts = getResourceCount(age, level);
+
+    console.log("resoureCounts:", resourceCounts)
     const fullTemplate = buildFullPrompt(age);
     const interpolatedPrompt = interpolatePrompt(fullTemplate, {
       age,

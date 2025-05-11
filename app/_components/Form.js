@@ -7,9 +7,8 @@ import { extractJsonFromGeminiResponse } from "@/app/_lib/utils";
 
 export default function Form() {
   const [formData, setFormData] = useState({
-    age: "",
-    level: "",
-    numSongs: "",
+    age: "Under 3 years",
+    level: "Beginner",
     topic: "",
   });
   const [responseData, setResponseData] = useState(null);
@@ -18,35 +17,52 @@ export default function Form() {
 
   useEffect(() => {
     if (responseData) {
-      console.log(responseData)
-      // const processSongs = async (songData) => {
-      //   try {
-      //     const rawData = songData.candidates[0].content.parts[0].text;
-      //     const cleaned = extractJsonFromGeminiResponse(rawData);
-      //     const parsedSongs = JSON.parse(cleaned);
-      //     console.log("songs:", parsedSongs);
-      //     const firstSong = parsedSongs[0];
+      const processSongs = async () => {
+        const rawData = responseData.candidates[0].content.parts[0].text;
+        console.log("rawData:", rawData);
+        const cleaned = extractJsonFromGeminiResponse(rawData);
+        const parsed = JSON.parse(cleaned);
 
-      //     const res = await fetch("/api/youtube", {
-      //       method: "POST",
-      //       headers: { "Content-Type": "application/json" },
-      //       body: JSON.stringify({
-      //         title: firstSong.title,
-      //         channel: firstSong.channel,
-      //       }),
-      //     });
-
-      //     const data = await res.json();
-      //     console.log("YouTube API response:", data);
-      //     const videoId = data.items[0].id.videoId;
-      //     setYoutubeData(videoId);
-      //   } catch (err) {
-      //     console.error("error fetching song:", err);
-      //   }
-      // };
-      // processSongs(responseData);
+        const songsSection = parsed.find(
+          (section) => section.section === "songs"
+        );
+        const songs = songsSection?.data || [];
+        const videoResults = await fetchYouTubeSongs(songs);
+        setYoutubeData(videoResults);
+        console.log("Video Results:", videoResults);
+      };
+      processSongs();
     }
   }, [responseData]);
+
+  const fetchYouTubeSongs = async (songs) => {
+    const results = [];
+
+    for (const song of songs) {
+      try {
+        const res = await fetch("/api/youtube", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: song.title,
+            channel: song.channel,
+          }),
+        });
+        const data = await res.json();
+        const videoId = data.items?.[0]?.id?.videoId;
+        if (videoId) {
+          results.push({
+            title: song.title,
+            channel: song.channel,
+            videoId,
+          });
+        }
+      } catch (err) {
+        console.error(`Error fetching YouTube data for ${song.title}:`, err);
+      }
+    }
+    return results;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -100,6 +116,7 @@ export default function Form() {
                 <select
                   id="age"
                   name="age"
+                  value={formData.age}
                   onChange={handleChange}
                   className="col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pr-8 pl-3 text-base outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
                 >
@@ -122,6 +139,7 @@ export default function Form() {
                 <select
                   id="level"
                   name="level"
+                  value={formData.level}
                   onChange={handleChange}
                   className="col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pr-8 pl-3 text-base outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
                 >
@@ -151,8 +169,18 @@ export default function Form() {
                 />
               </div>
             </div>
+          </div>
+          <div className="pt-6">
+            <FormButton text="Generate resources" onClick={handleSubmit} />
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+}
 
-            {/* <div className="sm:col-span-3">
+{
+  /* <div className="sm:col-span-3">
               <label htmlFor="numSongs" className="block text-sm/6 font-medium">
                 How many songs would you like to include?
               </label>
@@ -167,15 +195,7 @@ export default function Form() {
                   className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
                 />
               </div>
-            </div> */}
-          </div>
-          <div className="pt-6">
-            <FormButton text="Generate resources" onClick={handleSubmit} />
-          </div>
-        </div>
-      </div>
-    </form>
-  );
+            </div> */
 }
 
 // sample snippet - how youtube data can be embedded as iframe:
