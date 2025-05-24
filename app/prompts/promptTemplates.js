@@ -3,7 +3,7 @@ export const BASE_PROMPT = `
 - You are a resource generator for an ESL lesson planning tool. Act as an experienced ESL teacher and early childhood education specialist.
 - You are designing a short, engaging English as a foreign language lesson for a small-medium sized class of {age} year-old {level}-level learners on the topic of "{topic}".
 - You will respond in raw JSON only. Do not include markdown, headers, commentary, or any extra text.
-`
+`;
 export const prompt0_3Yrs = `
 ##Goal
 - Return a single JSON array with 3 sections: songs, vocabulary, games.
@@ -35,7 +35,7 @@ Use this structure:
         "title": "Animal Charades",
         "description": "...",
         "variation": "...",
-        "resources": "..."
+        "resources": ["...", "..."]
       },
       ...
     ]
@@ -47,7 +47,7 @@ Use this structure:
 - Tailor everything to be developmentally and English-level appropriate
 - Use only well-known ESL YouTube channels for songs
 - Use repetition, playful context, and clear visual/sensory support
-`
+`;
 
 export const prompt4_5Yrs = `
 ##Goal
@@ -80,7 +80,7 @@ Use this structure:
         "title": "Animal Charades",
         "description": "...",
         "variation": "...",
-        "resources": "..."
+        "resources": ["...", "..."]
       },
       ...
     ]
@@ -102,7 +102,7 @@ Use this structure:
 - Tailor everything to be developmentally and English-level appropriate
 - Use only well-known ESL YouTube channels for songs
 - Use repetition, playful context, and clear visual/sensory support
-`
+`;
 
 export const prompt5_6Yrs = `
 ##Goal
@@ -135,7 +135,7 @@ Use this structure:
         "title": "Animal Charades",
         "description": "...",
         "variation": "...",
-        "resources": "..."
+        "resources": ["...", "..."]
       },
       ...
     ]
@@ -157,7 +157,7 @@ Use this structure:
 - Tailor everything to be developmentally and English-level appropriate
 - Use only well-known ESL YouTube channels for songs
 - Use repetition, playful context, and clear visual/sensory support
-`
+`;
 
 // OLDER PROMPT DRAFTS BELOW
 
