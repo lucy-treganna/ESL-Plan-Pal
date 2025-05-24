@@ -1,11 +1,24 @@
+import { MusicalNoteIcon } from "@heroicons/react/24/outline";
+
 export default function Results({ lessonData }) {
   if (!lessonData) return null;
 
   const { songs, vocabulary, games, speaking } = lessonData;
 
   return (
-    <div className="mt-10 space-y-10">
-      {songs?.length > 0 && (
+    <div className="bg-cool-white rounded-xl shadow-sm space-y-12 max-w-3xl mx-auto">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 bg-sky-blue rounded-lg">
+          <MusicalNoteIcon className="w-6 h-6 text-charcoal" />
+        </div>
+        <h2 className="text-3xl font-bold text-charcoal">Songs</h2>
+      </div>
+    </div>
+  );
+}
+
+{
+  /* {songs?.length > 0 && (
         <section>
           <h3 className="text-lg font-semibold">🎵 Songs</h3>
           <ul className="space-y-6">
@@ -85,7 +98,5 @@ export default function Results({ lessonData }) {
             ))}
           </ul>
         </section>
-      )}
-    </div>
-  );
+      )} */
 }
