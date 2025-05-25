@@ -3,81 +3,9 @@
 import { useState, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import FormButton from "@/app/_components/FormButton";
+import Spinner from "@/app/_components/Spinner";
 import Results from "@/app/_components/Results";
 import { extractJsonFromGeminiResponse } from "@/app/_lib/utils";
-
-// const sampleLessonData = {
-//   songs: [
-//     {
-//       title: "Finger Family",
-//       channel: "Super Simple Songs",
-//       videoId: "G6k7dChBaJ8",
-//     },
-//     {
-//       title: "Baby Shark Family",
-//       channel: "Pinkfong",
-//       videoId: "8_KXRczWfYc",
-//     },
-//     {
-//       title: "I Love My Family",
-//       channel: "Dream English Kids",
-//       videoId: "FXqPs1IvtNs",
-//     },
-//   ],
-//   vocabulary: [
-//     { word: "Mother" },
-//     { word: "Father" },
-//     { word: "Brother" },
-//     { word: "Sister" },
-//     { word: "Grandmother" },
-//     { word: "Grandfather" },
-//     { word: "Baby" },
-//   ],
-//   games: [
-//     {
-//       title: "Family Photo Album Scramble",
-//       description:
-//         "Print and cut out family member photos. Have students race to match the picture to the spoken word.",
-//       variation: "Use drawings if real photos are unavailable.",
-//       resources: [
-//         "Printed photos of family members",
-//         "Drawings of family members (optional)",
-//         "Scissors",
-//       ],
-//     },
-//     {
-//       title: "Family Role-Play Circle",
-//       description:
-//         "Students sit in a circle. Pass a doll around, each student says “This is my [family member]”. Encourage them to add a simple action related to that person (e.g. “This is my baby. She sleeps.”)",
-//       variation:
-//         "Use different props like hats or scarves to represent each family member.",
-//       resources: ["Doll or small toy", "Optional props like hats or scarves"],
-//     },
-//   ],
-//   speaking: [
-//     {
-//       prompt: "Tell me about your family.",
-//       expected_response: [
-//         "I have a [mother/father/brother/sister/baby].",
-//         "My [family member] is [adjective].",
-//       ],
-//     },
-//     {
-//       prompt: "Who is the tallest person in your family? The shortest?",
-//       expected_response: [
-//         "My [family member] is the tallest.",
-//         "My [family member] is the shortest.",
-//       ],
-//     },
-//     {
-//       prompt: "What do you like to do with your family?",
-//       expected_response: [
-//         "I like to [activity] with my family.",
-//         "We like to [activity] together.",
-//       ],
-//     },
-//   ],
-// };
 
 export default function Form() {
   const [formData, setFormData] = useState({
@@ -88,10 +16,12 @@ export default function Form() {
   const [responseData, setResponseData] = useState(null);
   const [lessonData, setLessonData] = useState(null);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (lessonData) {
       console.log("lessonData:", lessonData);
+      setIsLoading(false);
     }
   }, [lessonData]);
 
@@ -173,6 +103,8 @@ export default function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setLessonData(null);
 
     try {
       const res = await fetch("/api/gemini", {
@@ -197,7 +129,16 @@ export default function Form() {
   };
   return (
     <>
-      {!lessonData ? (
+      {isLoading ? (
+          <Spinner />
+      ) : lessonData ? (
+        <Results
+          lessonData={lessonData}
+          age={formData.age}
+          topic={formData.topic}
+          level={formData.level}
+        />
+      ) : (
         <form>
           <div className="bg-cool-white rounded-xl shadow-sm space-y-12 max-w-3xl mx-auto">
             <div className="py-6 px-8">
@@ -277,49 +218,93 @@ export default function Form() {
                   </div>
                 </div>
               </div>
+
               <div className="pt-6">
-                <FormButton text="Generate resources" onClick={handleSubmit} />
+                <FormButton
+                  text="Generate resources"
+                  onClick={handleSubmit}
+                  isLoading={isLoading}
+                  loadingText="Generating..."
+                />
               </div>
             </div>
           </div>
         </form>
-      ) : (
-        <Results lessonData={lessonData} age={formData.age} topic={formData.topic} level={formData.level} />
       )}
     </>
   );
 }
 
-{
-  /* <div className="sm:col-span-3">
-              <label htmlFor="numSongs" className="block text-sm/6 font-medium">
-                How many songs would you like to include?
-              </label>
-              <div className="mt-2">
-                <input
-                  id="numSongs"
-                  name="numSongs"
-                  max="5"
-                  placeholder="Choose a max. of 5"
-                  type="number"
-                  onChange={handleChange}
-                  className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
-                />
-              </div>
-            </div> */
-}
-
-// sample snippet - how youtube data can be embedded as iframe:
-{
-  /* {youtubeData && (
-        <div className="aspect-w-16 aspect-h-9">
-          <iframe
-            src={`https://www.youtube.com/embed/${youtubeData}`}
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="w-full h-full"
-          ></iframe>
-        </div>
-      )} */
-}
+// Sample data for testing
+// const sampleLessonData = {
+//   songs: [
+//     {
+//       title: "Finger Family",
+//       channel: "Super Simple Songs",
+//       videoId: "G6k7dChBaJ8",
+//     },
+//     {
+//       title: "Baby Shark Family",
+//       channel: "Pinkfong",
+//       videoId: "8_KXRczWfYc",
+//     },
+//     {
+//       title: "I Love My Family",
+//       channel: "Dream English Kids",
+//       videoId: "FXqPs1IvtNs",
+//     },
+//   ],
+//   vocabulary: [
+//     { word: "Mother" },
+//     { word: "Father" },
+//     { word: "Brother" },
+//     { word: "Sister" },
+//     { word: "Grandmother" },
+//     { word: "Grandfather" },
+//     { word: "Baby" },
+//   ],
+//   games: [
+//     {
+//       title: "Family Photo Album Scramble",
+//       description:
+//         "Print and cut out family member photos. Have students race to match the picture to the spoken word.",
+//       variation: "Use drawings if real photos are unavailable.",
+//       resources: [
+//         "Printed photos of family members",
+//         "Drawings of family members (optional)",
+//         "Scissors",
+//       ],
+//     },
+//     {
+//       title: "Family Role-Play Circle",
+//       description:
+//         "Students sit in a circle. Pass a doll around, each student says “This is my [family member]”. Encourage them to add a simple action related to that person (e.g. “This is my baby. She sleeps.”)",
+//       variation:
+//         "Use different props like hats or scarves to represent each family member.",
+//       resources: ["Doll or small toy", "Optional props like hats or scarves"],
+//     },
+//   ],
+//   speaking: [
+//     {
+//       prompt: "Tell me about your family.",
+//       expected_response: [
+//         "I have a [mother/father/brother/sister/baby].",
+//         "My [family member] is [adjective].",
+//       ],
+//     },
+//     {
+//       prompt: "Who is the tallest person in your family? The shortest?",
+//       expected_response: [
+//         "My [family member] is the tallest.",
+//         "My [family member] is the shortest.",
+//       ],
+//     },
+//     {
+//       prompt: "What do you like to do with your family?",
+//       expected_response: [
+//         "I like to [activity] with my family.",
+//         "We like to [activity] together.",
+//       ],
+//     },
+//   ],
+// };
