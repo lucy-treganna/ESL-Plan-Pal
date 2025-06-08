@@ -14,14 +14,14 @@ export default function Results({ lessonData, age, level, topic }) {
 
   return (
     <div className="bg-cool-white font-inter rounded-xl shadow-sm max-w-5xl mx-auto py-6 px-6 sm:px-8">
-      <div className="text-center space-y-2 tracking-tight mb-6 mx-8">
+      <div className="text-center space-y-2 tracking-tight mb-6 sm:mx-8">
         <h1 className="text-2xl font-bold md:text-3xl text-medium-purple">
           <span className="inline-flex items-center gap-2 justify-center">
-            <RocketLaunchIcon className="h-8 w-8" />
+            <RocketLaunchIcon className="h-6 w-6 sm:h-8 sm:w-8" />
             Your Lesson Plan Is Ready!
           </span>
         </h1>
-        <p className="text-md text-charcoal/80 mx-4 sm:mx-6">
+        <p className="text-sm sm:text-base text-charcoal/80 mx-4 sm:mx-6">
           Explore fun and engaging songs, games, and vocabulary for your {topic}{" "}
           lesson — intelligently matched to {cleanedAge}-old {level} learners.
         </p>
