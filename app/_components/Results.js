@@ -3,21 +3,27 @@ import {
   BookOpenIcon,
   PuzzlePieceIcon,
   ChatBubbleBottomCenterTextIcon,
+  RocketLaunchIcon,
 } from "@heroicons/react/24/outline";
 
 export default function Results({ lessonData, age, level, topic }) {
   if (!lessonData) return null;
 
   const { songs, vocabulary, games, speaking } = lessonData;
+  const cleanedAge = age.replace(/\byears\b/, "year");
 
   return (
     <div className="bg-cool-white font-inter rounded-xl shadow-sm max-w-5xl mx-auto py-6 px-6 sm:px-8">
-      <div className="text-center space-y-2 tracking-tight mb-6">
+      <div className="text-center space-y-2 tracking-tight mb-6 mx-8">
         <h1 className="text-2xl font-bold md:text-3xl text-medium-purple">
-          Your AI-Generated Lesson Plan Is Ready!
+          <span className="inline-flex items-center gap-2 justify-center">
+            <RocketLaunchIcon className="h-8 w-8" />
+            Your Lesson Plan Is Ready!
+          </span>
         </h1>
         <p className="text-md text-charcoal/80 mx-4 sm:mx-6">
-          Here are your personalized resources for a {topic}-themed lesson for {age} aged {level} learners.
+          Explore fun and engaging songs, games, and vocabulary for your {topic}{" "}
+          lesson — intelligently matched to {cleanedAge}-old {level} learners.
         </p>
       </div>
 
