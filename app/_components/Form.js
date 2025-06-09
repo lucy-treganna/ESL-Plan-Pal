@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import FormButton from "@/app/_components/FormButton";
 import Spinner from "@/app/_components/Spinner";
 import Results from "@/app/_components/Results";
-import { extractJsonFromGeminiResponse } from "@/app/_lib/utils";
+import { extractJsonFromGeminiResponse } from "@/app/utils";
 
 export default function Form() {
   const [formData, setFormData] = useState({
