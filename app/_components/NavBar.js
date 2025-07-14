@@ -1,5 +1,3 @@
-"use server";
-
 import Link from "next/link";
 import SignOutButton from "@/app/_components/SignOutButton";
 import { createClient } from "@/app/utils/supabase/server";
