@@ -3,8 +3,8 @@ import { SparklesIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   return (
-    <main className="mt-24 flex flex-col items-center justify-center">
-      <div className="absolute inset-0 pointer-events-none">
+    <div className="mt-24 flex flex-col items-center justify-center">
+      <div className="overflow-x-hidden absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-64 h-64 bg-sky-blue rounded-full blur-3xl opacity-60 transform -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-medium-blue rounded-full blur-3xl opacity-40 transform translate-x-1/2 translate-y-1/2"></div>
       </div>
@@ -34,6 +34,6 @@ export default function Home() {
           Find Out More
         </button>
       </div>
-    </main>
+    </div>
   );
 }
