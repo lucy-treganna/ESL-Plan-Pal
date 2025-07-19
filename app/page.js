@@ -3,7 +3,7 @@ import { SparklesIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   return (
-    <div className="mt-24 flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="overflow-x-hidden absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-64 h-64 bg-sky-blue rounded-full blur-3xl opacity-60 transform -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-medium-blue rounded-full blur-3xl opacity-40 transform translate-x-1/2 translate-y-1/2"></div>
@@ -18,10 +18,10 @@ export default function Home() {
             Lesson Planning, Simplified
           </span>
         </h1>
-        <p className="mt-6 max-w-5xl font-semibold font-poppins text-lg leading-8 text-grey-purple">
+        <h2 className="mt-6 max-w-5xl font-semibold font-poppins text-lg leading-8 text-grey-purple">
           Generate, search, and save engaging ESL resources for young learners.
           Build and customize AI-powered lesson plans effortlessly.
-        </p>
+        </h2>
       </div>
       <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center lg:justify-start">
         <Link
