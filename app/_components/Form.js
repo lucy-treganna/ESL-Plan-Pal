@@ -139,7 +139,7 @@ export default function Form() {
           level={formData.level}
         />
       ) : (
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="bg-cool-white rounded-xl shadow-sm space-y-12 max-w-3xl mx-auto">
             <div className="py-6 px-8">
               <h2 className="text-base/7 font-bold text-grey-purple">
@@ -222,7 +222,7 @@ export default function Form() {
               <div className="pt-6">
                 <FormButton
                   text="Generate resources"
-                  onClick={handleSubmit}
+                  // onSubmit={handleSubmit}
                   isLoading={isLoading}
                   loadingText="Generating..."
                 />

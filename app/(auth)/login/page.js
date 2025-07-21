@@ -6,8 +6,8 @@ import AuthForm from "@/app/_components/AuthForm";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col items-center justify-center border border-red-500">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center border border-green-500">
+    <div className="flex flex-col items-center justify-center">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center mb-10">
         <Image
           alt="ESL PlanPal logo"
           src="/planpal_logo.png"
@@ -20,9 +20,9 @@ export default function LoginPage() {
         </h2>
       </div>
 
-      <FormCard>
-        <AuthForm />
-      </FormCard>
+        <FormCard>
+          <AuthForm formAction={login} />
+        </FormCard>
 
       {/* <div className="mt-10 w-full sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-cool-white rounded-xl px-6 py-12 shadow-sm sm:px-12">

@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
       >
         <div className="flex flex-col min-h-full">
           <NavBar />
-          <main className="flex-1 px-8 flex justify-center items-center">
+          <main className="flex-1 px-8 py-12">
             <div className="w-full max-w-7xl">{children}</div>
           </main>
         </div>

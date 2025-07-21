@@ -1,11 +1,10 @@
 "use client";
 
 import FormButton from "./FormButton"
-import { login } from "@/app/_lib/actions";
 
-export default function AuthForm() {
+export default function AuthForm({ formAction }) {
   return (
-    <form action={login} className="space-y-6">
+    <form action={formAction} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium">
                 Email address
@@ -37,7 +36,7 @@ export default function AuthForm() {
                 />
               </div>
             </div>
-            <FormButton text="Log in" />
+            <FormButton text="Log in" loadingText="Logging in..." />
           </form>
   )
 }
