@@ -32,15 +32,22 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal relative h-full`}
+        className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal h-full`}
       >
-        <div className="flex flex-col min-h-full">
-          <NavBar />
-          <main className="flex-1 px-8 py-12">
-            <div className="w-full mx-auto max-w-7xl">{children}</div>
-          </main>
-        </div>
+        {children}
       </body>
     </html>
+    // <html lang="en" className="h-full">
+    //   <body
+    //     className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal relative h-full`}
+    //   >
+    //     <div className="flex flex-col min-h-full">
+    //       <NavBar />
+    //       <main className="flex-1 px-8 py-12">
+    //         <div className="w-full mx-auto max-w-7xl">{children}</div>
+    //       </main>
+    //     </div>
+    //   </body>
+    // </html>
   );
 }
