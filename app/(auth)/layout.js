@@ -1,4 +1,3 @@
-// app/(auth)/layout.tsx
 import NavBar from "@/app/_components/NavBar";
 
 export default function AuthLayout({ children }) {

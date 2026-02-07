@@ -1,4 +1,3 @@
-// app/(app)/layout.tsx
 import NavBar from "@/app/_components/NavBar";
 
 export default function AppLayout({ children }) {
