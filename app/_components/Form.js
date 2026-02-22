@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import FormButton from "@/app/_components/FormButton";
 import Spinner from "@/app/_components/Spinner";
 import Results from "@/app/_components/Results";
-import { extractJsonFromGeminiResponse } from "@/app/_lib/utils";
+import { extractJsonFromGeminiResponse } from "@/app/utils";
 
 export default function Form() {
   const [formData, setFormData] = useState({
@@ -20,7 +20,6 @@ export default function Form() {
 
   useEffect(() => {
     if (lessonData) {
-      console.log("lessonData:", lessonData);
       setIsLoading(false);
     }
   }, [lessonData]);
@@ -29,7 +28,6 @@ export default function Form() {
     if (responseData) {
       const processResources = async () => {
         const rawData = responseData.candidates[0].content.parts[0].text;
-        console.log("rawData:", rawData);
         const cleaned = extractJsonFromGeminiResponse(rawData);
         const parsed = JSON.parse(cleaned);
 
@@ -139,7 +137,7 @@ export default function Form() {
           level={formData.level}
         />
       ) : (
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="bg-cool-white rounded-xl shadow-sm space-y-12 max-w-3xl mx-auto">
             <div className="py-6 px-8">
               <h2 className="text-base/7 font-bold text-grey-purple">
@@ -213,7 +211,7 @@ export default function Form() {
                       type="text"
                       placeholder="e.g. Space"
                       onChange={handleChange}
-                      className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
+                      className="block w-full rounded-md px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-charcoal/20 focus:outline-2 focus:-outline-offset-2 focus:outline-medium-blue sm:text-sm/6"
                     />
                   </div>
                 </div>
@@ -222,7 +220,7 @@ export default function Form() {
               <div className="pt-6">
                 <FormButton
                   text="Generate resources"
-                  onClick={handleSubmit}
+                  // onSubmit={handleSubmit}
                   isLoading={isLoading}
                   loadingText="Generating..."
                 />
@@ -234,77 +232,3 @@ export default function Form() {
     </>
   );
 }
-
-// Sample data for testing
-// const sampleLessonData = {
-//   songs: [
-//     {
-//       title: "Finger Family",
-//       channel: "Super Simple Songs",
-//       videoId: "G6k7dChBaJ8",
-//     },
-//     {
-//       title: "Baby Shark Family",
-//       channel: "Pinkfong",
-//       videoId: "8_KXRczWfYc",
-//     },
-//     {
-//       title: "I Love My Family",
-//       channel: "Dream English Kids",
-//       videoId: "FXqPs1IvtNs",
-//     },
-//   ],
-//   vocabulary: [
-//     { word: "Mother" },
-//     { word: "Father" },
-//     { word: "Brother" },
-//     { word: "Sister" },
-//     { word: "Grandmother" },
-//     { word: "Grandfather" },
-//     { word: "Baby" },
-//   ],
-//   games: [
-//     {
-//       title: "Family Photo Album Scramble",
-//       description:
-//         "Print and cut out family member photos. Have students race to match the picture to the spoken word.",
-//       variation: "Use drawings if real photos are unavailable.",
-//       resources: [
-//         "Printed photos of family members",
-//         "Drawings of family members (optional)",
-//         "Scissors",
-//       ],
-//     },
-//     {
-//       title: "Family Role-Play Circle",
-//       description:
-//         "Students sit in a circle. Pass a doll around, each student says “This is my [family member]”. Encourage them to add a simple action related to that person (e.g. “This is my baby. She sleeps.”)",
-//       variation:
-//         "Use different props like hats or scarves to represent each family member.",
-//       resources: ["Doll or small toy", "Optional props like hats or scarves"],
-//     },
-//   ],
-//   speaking: [
-//     {
-//       prompt: "Tell me about your family.",
-//       expected_response: [
-//         "I have a [mother/father/brother/sister/baby].",
-//         "My [family member] is [adjective].",
-//       ],
-//     },
-//     {
-//       prompt: "Who is the tallest person in your family? The shortest?",
-//       expected_response: [
-//         "My [family member] is the tallest.",
-//         "My [family member] is the shortest.",
-//       ],
-//     },
-//     {
-//       prompt: "What do you like to do with your family?",
-//       expected_response: [
-//         "I like to [activity] with my family.",
-//         "We like to [activity] together.",
-//       ],
-//     },
-//   ],
-// };

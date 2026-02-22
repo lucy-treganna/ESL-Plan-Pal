@@ -1,10 +1,16 @@
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
+"use client";
 
-export default function FormButton({ onClick, text, isLoading, loadingText }) {
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { useFormStatus } from "react-dom";
+
+export default function FormButton({ text, isLoading: externalLoading, loadingText }) {
+  const { pending } = useFormStatus()
+
+    const isLoading = typeof externalLoading === "boolean" ? externalLoading : pending;
+
   return (
     <button
       type="submit"
-      onClick={onClick}
       disabled={isLoading}
       className="w-full flex items-center justify-center gap-2 rounded-lg bg-medium-purple hover:bg-medium-purple/90 hover:cursor-pointer text-white py-2"
     >

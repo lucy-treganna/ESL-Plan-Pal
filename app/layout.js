@@ -30,14 +30,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal relative`}
+        className={`${merriweather.variable} ${inter.variable} ${poppins.variable} antialiased bg-pale-blue text-charcoal h-full`}
       >
-        <NavBar />
-        <div className="flex-1 px-8 py-12 grid">
-          <main className="max-w-7xl mx-auto w-full">{children}</main>
-        </div>
+        {children}
       </body>
     </html>
   );
