@@ -2,8 +2,6 @@
 
 An AI-powered lesson planning tool for ESL teachers working with young learners (ages 0-6). Generate age-appropriate songs, vocabulary, games, and speaking activities tailored to specific proficiency levels.
 
-> **Note:** This project is in active development. Core functionality is working but features and polish are ongoing.
-
 ---
 
 ## Features
