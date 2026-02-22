@@ -21,7 +21,7 @@ An AI-powered lesson planning tool for ESL teachers working with young learners 
 
 | Layer | Technology |
 |---|---|
-| Framework | Next.js 15 (App Router) |
+| Framework | Next.js 16 (App Router) |
 | UI | React, Tailwind CSS, Headless UI, Heroicons |
 | Auth & Database | Supabase |
 | AI | Google Gemini API |
