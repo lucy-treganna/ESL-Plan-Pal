@@ -1,5 +1,7 @@
 # ESL PlanPal
 
+**[Live Demo](https://esl-plan-pal.vercel.app/)**
+
 An AI-powered lesson planning tool for ESL teachers working with young learners (ages 0-6). Generate age-appropriate songs, vocabulary, games, and speaking activities tailored to specific proficiency levels.
 
 ---
