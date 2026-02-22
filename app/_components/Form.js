@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import FormButton from "@/app/_components/FormButton";
-import Spinner from "@/app/_components/Spinner";
 import Results from "@/app/_components/Results";
-import { extractJsonFromGeminiResponse } from "@/app/utils";
 
 export default function Form() {
   const [formData, setFormData] = useState({
@@ -13,123 +11,80 @@ export default function Form() {
     level: "Beginner",
     topic: "",
   });
-  const [responseData, setResponseData] = useState(null);
   const [lessonData, setLessonData] = useState(null);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (lessonData) {
-      setIsLoading(false);
-    }
-  }, [lessonData]);
-
-  useEffect(() => {
-    if (responseData) {
-      const processResources = async () => {
-        const rawData = responseData.candidates[0].content.parts[0].text;
-        const cleaned = extractJsonFromGeminiResponse(rawData);
-        const parsed = JSON.parse(cleaned);
-
-        const songsSection = parsed.find(
-          (section) => section.section === "songs"
-        );
-        const vocabularySection = parsed.find(
-          (s) => s.section === "vocabulary"
-        );
-        const gamesSection = parsed.find((s) => s.section === "games");
-        const speakingSection = parsed.find(
-          (s) => s.section === "speaking_prompts"
-        );
-
-        const songs = songsSection?.data || [];
-        const vocabulary = vocabularySection?.data || [];
-        const games = gamesSection?.data || [];
-        const speaking = speakingSection?.data || [];
-
-        // Fetch YouTube data for songs
-        const videoResults = await fetchYouTubeSongs(songs);
-
-        // Set lessonData object
-        setLessonData({
-          songs: videoResults,
-          vocabulary,
-          games,
-          speaking,
-        });
-      };
-      processResources();
-    }
-  }, [responseData]);
+  const fetchSection = async (section) => {
+    const res = await fetch("/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...formData, section }),
+    });
+    if (!res.ok) throw new Error(`Failed to fetch ${section}`);
+    const { data } = await res.json();
+    return data;
+  };
 
   const fetchYouTubeSongs = async (songs) => {
-    const results = [];
-
-    for (const song of songs) {
-      try {
-        const res = await fetch("/api/youtube", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: song.title,
-            channel: song.channel,
-          }),
-        });
-        const data = await res.json();
-        const videoId = data.items?.[0]?.id?.videoId;
-        if (videoId) {
-          results.push({
-            title: song.title,
-            channel: song.channel,
-            videoId,
+    const results = await Promise.all(
+      songs.map(async (song) => {
+        try {
+          const res = await fetch("/api/youtube", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: song.title, channel: song.channel }),
           });
+          const data = await res.json();
+          const videoId = data.items?.[0]?.id?.videoId;
+          if (videoId) return { title: song.title, channel: song.channel, videoId };
+        } catch (err) {
+          console.error(`Error fetching YouTube data for ${song.title}:`, err);
         }
-      } catch (err) {
-        console.error(`Error fetching YouTube data for ${song.title}:`, err);
-      }
-    }
-    return results;
+        return null;
+      })
+    );
+    return results.filter(Boolean);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setLessonData(null);
+    setIsSubmitting(true);
+    setError(null);
 
-    try {
-      const res = await fetch("/api/gemini", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    // Show results page immediately with all sections loading
+    setLessonData({ songs: null, vocabulary: null, games: null, speaking: null });
+    setIsSubmitting(false);
 
-      const data = await res.json();
+    // Fire all section requests in parallel
+    const fetchVocabulary = fetchSection("vocabulary")
+      .then((data) => setLessonData((prev) => ({ ...prev, vocabulary: data })))
+      .catch(() => setLessonData((prev) => ({ ...prev, vocabulary: [] })));
 
-      if (res.ok) {
-        setResponseData(data);
-        setError(null);
-      } else {
-        setError(data.error || "An error occurred");
-      }
-    } catch (error) {
-      setError("An error occurred during submission");
-    }
+    const fetchGames = fetchSection("games")
+      .then((data) => setLessonData((prev) => ({ ...prev, games: data })))
+      .catch(() => setLessonData((prev) => ({ ...prev, games: [] })));
+
+    const fetchSpeaking = fetchSection("speaking_prompts")
+      .then((data) => setLessonData((prev) => ({ ...prev, speaking: data })))
+      .catch(() => setLessonData((prev) => ({ ...prev, speaking: [] })));
+
+    const fetchSongs = fetchSection("songs")
+      .then((songsList) => fetchYouTubeSongs(songsList))
+      .then((videoResults) => setLessonData((prev) => ({ ...prev, songs: videoResults })))
+      .catch(() => setLessonData((prev) => ({ ...prev, songs: [] })));
+
+    await Promise.allSettled([fetchVocabulary, fetchGames, fetchSpeaking, fetchSongs]);
   };
+
   return (
     <>
-      {isLoading ? (
-          <Spinner />
-      ) : lessonData ? (
+      {lessonData ? (
         <Results
           lessonData={lessonData}
           age={formData.age}
@@ -172,10 +127,7 @@ export default function Form() {
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label
-                    htmlFor="level"
-                    className="block text-sm/6 font-medium"
-                  >
+                  <label htmlFor="level" className="block text-sm/6 font-medium">
                     What is their English level?
                   </label>
                   <div className="mt-2 grid grid-cols-1">
@@ -198,10 +150,7 @@ export default function Form() {
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label
-                    htmlFor="topic"
-                    className="block text-sm/6 font-medium"
-                  >
+                  <label htmlFor="topic" className="block text-sm/6 font-medium">
                     What is the topic of your lesson?
                   </label>
                   <div className="mt-2">
@@ -220,8 +169,7 @@ export default function Form() {
               <div className="pt-6">
                 <FormButton
                   text="Generate resources"
-                  // onSubmit={handleSubmit}
-                  isLoading={isLoading}
+                  isLoading={isSubmitting}
                   loadingText="Generating..."
                 />
               </div>

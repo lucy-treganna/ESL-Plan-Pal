@@ -1,3 +1,17 @@
+export const SECTION_PROMPTS = {
+  vocabulary: `You are an ESL teacher. Generate {numWords} vocabulary words for {age} year-old {level}-level learners on the topic "{topic}".
+Return a raw JSON array only — no markdown, no extra text: [{"word":"..."},...]`,
+
+  songs: `You are an ESL teacher. Suggest {numSongs} YouTube songs for {age} year-old {level}-level ESL learners on the topic "{topic}". Use well-known ESL channels only (e.g. Super Simple Songs, Cocomelon, Jack Hartmann, KidsTV123).
+Return a raw JSON array only — no markdown, no extra text: [{"title":"...","channel":"..."},...]`,
+
+  games: `You are an ESL teacher. Design {numGames} classroom games for {age} year-old {level}-level ESL learners on the topic "{topic}". Each game must have a title, description, a variation, and a list of resources needed.
+Return a raw JSON array only — no markdown, no extra text: [{"title":"...","description":"...","variation":"...","resources":["..."]},...]`,
+
+  speaking_prompts: `You are an ESL teacher. Create {numPrompts} speaking prompts for {age} year-old {level}-level ESL learners on the topic "{topic}". Each must have a prompt and expected responses.
+Return a raw JSON array only — no markdown, no extra text: [{"prompt":"...","expected_response":["..."]},...]`,
+};
+
 export const BASE_PROMPT = `
 ##Role
 - You are a resource generator for an ESL lesson planning tool. Act as an experienced ESL teacher and early childhood education specialist.

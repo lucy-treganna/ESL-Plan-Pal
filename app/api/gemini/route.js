@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
-import {
-  getResourceCount,
-  buildFullPrompt,
-  interpolatePrompt,
-} from "@/app/prompts/promptHelpers";
+import { getResourceCount, buildSectionPrompt } from "@/app/prompts/promptHelpers";
+import { extractJsonFromGeminiResponse } from "@/app/utils";
 
 export async function POST(req) {
   try {
-    const { age, level, topic } = await req.json();
+    const { age, level, topic, section } = await req.json();
     const resourceCounts = getResourceCount(age, level);
 
-    const fullTemplate = buildFullPrompt(age);
-    const interpolatedPrompt = interpolatePrompt(fullTemplate, {
+    const prompt = buildSectionPrompt(section, {
       age,
       level,
       topic,
@@ -19,33 +15,21 @@ export async function POST(req) {
       numWords: resourceCounts.vocabulary,
       numGames: resourceCounts.games,
       numPrompts: resourceCounts.speakingPrompts ?? 0,
-    })
+    });
 
-    // Prepare the req to Gemini API
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: interpolatedPrompt,
-                },
-              ],
-            },
-          ],
+          contents: [{ parts: [{ text: prompt }] }],
         }),
       }
     );
 
     const data = await res.json();
 
-    // Check if the response is OK
     if (!res.ok) {
       console.error("Gemini API error:", res.status, data);
       return NextResponse.json(
@@ -54,8 +38,11 @@ export async function POST(req) {
       );
     }
 
-    // Return the response data from Gemini
-    return NextResponse.json(data);
+    const rawText = data.candidates[0].content.parts[0].text;
+    const cleaned = extractJsonFromGeminiResponse(rawText);
+    const parsed = JSON.parse(cleaned);
+
+    return NextResponse.json({ data: parsed });
   } catch (error) {
     console.error("Route error:", error);
     return NextResponse.json(

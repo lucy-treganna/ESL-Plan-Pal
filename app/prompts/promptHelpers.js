@@ -1,5 +1,6 @@
 import {
   BASE_PROMPT,
+  SECTION_PROMPTS,
   prompt0_3Yrs,
   prompt4_5Yrs,
   prompt5_6Yrs,
@@ -43,6 +44,13 @@ export function getPromptTemplate(age) {
 // 3. Merge BASE_PROMPT with age-specific template
 export function buildFullPrompt(age) {
   return BASE_PROMPT + "\n" + getPromptTemplate(age);
+}
+
+// Build a focused single-section prompt
+export function buildSectionPrompt(section, values) {
+  const template = SECTION_PROMPTS[section];
+  if (!template) throw new Error(`No prompt template found for section: ${section}`);
+  return interpolatePrompt(template, values);
 }
 
 // 4. Replace all placeholders in the full string
