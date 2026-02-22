@@ -20,7 +20,6 @@ export default function Form() {
 
   useEffect(() => {
     if (lessonData) {
-      console.log("lessonData:", lessonData);
       setIsLoading(false);
     }
   }, [lessonData]);
@@ -29,7 +28,6 @@ export default function Form() {
     if (responseData) {
       const processResources = async () => {
         const rawData = responseData.candidates[0].content.parts[0].text;
-        console.log("rawData:", rawData);
         const cleaned = extractJsonFromGeminiResponse(rawData);
         const parsed = JSON.parse(cleaned);
 

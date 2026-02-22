@@ -2,7 +2,7 @@
 
 import FormButton from "./FormButton";
 
-export default function AuthForm({ formAction }) {
+export default function AuthForm({ formAction, buttonText = "Log in", buttonLoadingText = "Logging in..." }) {
   return (
     <form action={formAction} className="space-y-6">
       <div>
@@ -36,7 +36,7 @@ export default function AuthForm({ formAction }) {
           />
         </div>
       </div>
-      <FormButton text="Log in" loadingText="Logging in..." />
+      <FormButton text={buttonText} loadingText={buttonLoadingText} />
     </form>
   );
 }
