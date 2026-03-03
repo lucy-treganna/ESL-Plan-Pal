@@ -5,6 +5,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import FormButton from "@/app/_components/FormButton";
 import Spinner from "@/app/_components/Spinner";
 import Results from "@/app/_components/Results";
+import ErrorCard from "@/app/_components/ErrorCard";
 import { extractJsonFromGeminiResponse } from "@/app/utils";
 
 export default function Form() {
@@ -27,9 +28,16 @@ export default function Form() {
   useEffect(() => {
     if (responseData) {
       const processResources = async () => {
+        console.log("[processResources] Starting, responseData:", responseData);
+
         const rawData = responseData.candidates[0].content.parts[0].text;
+        console.log("[processResources] Raw Gemini text:", rawData);
+
         const cleaned = extractJsonFromGeminiResponse(rawData);
+        console.log("[processResources] Cleaned JSON string:", cleaned);
+
         const parsed = JSON.parse(cleaned);
+        console.log("[processResources] Parsed sections:", parsed);
 
         const songsSection = parsed.find(
           (section) => section.section === "songs"
@@ -47,8 +55,11 @@ export default function Form() {
         const games = gamesSection?.data || [];
         const speaking = speakingSection?.data || [];
 
+        console.log("[processResources] Songs to fetch:", songs);
+
         // Fetch YouTube data for songs
         const videoResults = await fetchYouTubeSongs(songs);
+        console.log("[processResources] YouTube video results:", videoResults);
 
         // Set lessonData object
         setLessonData({
@@ -66,6 +77,7 @@ export default function Form() {
     const results = [];
 
     for (const song of songs) {
+      console.log(`[fetchYouTubeSongs] Fetching: "${song.title}" by ${song.channel}`);
       try {
         const res = await fetch("/api/youtube", {
           method: "POST",
@@ -75,7 +87,9 @@ export default function Form() {
             channel: song.channel,
           }),
         });
+        console.log(`[fetchYouTubeSongs] YouTube response status for "${song.title}":`, res.status);
         const data = await res.json();
+        console.log(`[fetchYouTubeSongs] YouTube response data for "${song.title}":`, data);
         const videoId = data.items?.[0]?.id?.videoId;
         if (videoId) {
           results.push({
@@ -83,9 +97,11 @@ export default function Form() {
             channel: song.channel,
             videoId,
           });
+        } else {
+          console.warn(`[fetchYouTubeSongs] No videoId found for "${song.title}"`);
         }
       } catch (err) {
-        console.error(`Error fetching YouTube data for ${song.title}:`, err);
+        console.error(`[fetchYouTubeSongs] Error fetching YouTube data for ${song.title}:`, err);
       }
     }
     return results;
@@ -104,6 +120,8 @@ export default function Form() {
     setIsLoading(true);
     setLessonData(null);
 
+    console.log("[handleSubmit] Submitting form with data:", formData);
+
     try {
       const res = await fetch("/api/gemini", {
         method: "POST",
@@ -113,22 +131,35 @@ export default function Form() {
         body: JSON.stringify(formData),
       });
 
+      console.log("[handleSubmit] Gemini API response status:", res.status, res.ok);
+
       const data = await res.json();
+      console.log("[handleSubmit] Gemini API response data:", data);
 
       if (res.ok) {
         setResponseData(data);
         setError(null);
       } else {
+        console.error("[handleSubmit] Gemini API returned error:", data);
         setError(data.error || "An error occurred");
+        setIsLoading(false);
       }
     } catch (error) {
+      console.error("[handleSubmit] Fetch threw an exception:", error);
       setError("An error occurred during submission");
+      setIsLoading(false);
     }
   };
   return (
     <>
       {isLoading ? (
-          <Spinner />
+        <Spinner />
+      ) : error ? (
+        <ErrorCard
+          title="Oops! Something went wrong"
+          message={error}
+          onClick={() => setError(null)}
+        />
       ) : lessonData ? (
         <Results
           lessonData={lessonData}
