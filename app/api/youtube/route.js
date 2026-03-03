@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const { title, channel } = await req.json();
+    console.log("[/api/youtube] Received request:", { title, channel });
 
     const q = `${title} ${channel}`;
     const encodedQuery = encodeURIComponent(q);
@@ -12,10 +13,11 @@ export async function POST(req) {
     );
 
     const data = await res.json();
+    console.log("[/api/youtube] YouTube response status:", res.status, res.ok);
 
     // Check if the response is OK
     if (!res.ok) {
-      console.error("YouTube API error response:", data)
+      console.error("[/api/youtube] YouTube API error response:", data)
 
       return NextResponse.json(
         { error: data.error?.message || "Error from YouTube API" },
